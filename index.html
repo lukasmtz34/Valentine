@@ -8,6 +8,7 @@
       font-family: Arial, sans-serif;
       background: linear-gradient(135deg, #ff9a9e, #fad0c4);
       height: 100vh;
+      margin: 0;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -22,6 +23,7 @@
       border-radius: 20px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
       position: relative;
+      z-index: 2;
     }
 
     button {
@@ -43,51 +45,77 @@
       color: #ff4d6d;
       position: absolute;
     }
+
+    /* Herzen */
+    .heart {
+      position: fixed;
+      top: -10px;
+      font-size: 24px;
+      animation: fall linear forwards;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <h1>💖 Willst du mein Valentine sein? 💖</h1>
-    <p>Bitte sag ja… 🥹</p>
+<div class="card" id="card">
+  <h1>💖 Willst du mein Valentine sein? 💖</h1>
+  <p>Bitte sag ja… 🥹</p>
 
-    <button class="yes" onclick="sayYes()">Ja 💘</button>
-    <button class="no" id="noBtn">Nein 🙃</button>
-  </div>
+  <button class="yes" onclick="sayYes()">Ja 💘</button>
+  <button class="no" id="noBtn">Nein 🙃</button>
+</div>
 
-  <script>
-    const noBtn = document.getElementById("noBtn");
+<script>
+  const noBtn = document.getElementById("noBtn");
 
-    noBtn.addEventListener("mouseover", moveButton);
-    noBtn.addEventListener("click", moveButton);
+  noBtn.addEventListener("mouseover", moveButton);
+  noBtn.addEventListener("click", moveButton);
 
-    function moveButton() {
-      const card = document.querySelector(".card");
-      const cardRect = card.getBoundingClientRect();
+  function moveButton() {
+    const card = document.getElementById("card");
+    const rect = card.getBoundingClientRect();
 
-      const x = Math.random() * (cardRect.width - noBtn.offsetWidth);
-      const y = Math.random() * (cardRect.height - noBtn.offsetHeight);
+    const x = Math.random() * (rect.width - noBtn.offsetWidth);
+    const y = Math.random() * (rect.height - noBtn.offsetHeight);
 
-      noBtn.style.left = `${x}px`;
-      noBtn.style.top = `${y}px`;
-    }
+    noBtn.style.left = `${x}px`;
+    noBtn.style.top = `${y}px`;
+  }
 
-    function sayYes() {
-      document.body.innerHTML = `
-        <div style="
-          display:flex;
-          justify-content:center;
-          align-items:center;
-          height:100vh;
-          font-size:32px;
-          text-align:center;
-        ">
-          🥰 Yaaay! Ich liebe dich! 💕
-        </div>
+  function sayYes() {
+    document.getElementById("card").innerHTML = `
+        <h1>🥰 Yaaay!</h1>
+        <p>Nuuuuuur Liebe 💕</p>
       `;
-    }
-  </script>
+    startHearts();
+  }
+
+  function startHearts() {
+    setInterval(() => {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.innerText = "💖";
+
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (Math.random() * 2 + 3) + "s";
+
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 5000);
+    }, 200);
+  }
+</script>
 
 </body>
 </html>
-
